@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Pieces Clicker - ÉVÉNEMENT GLOBAL</title>
+    <title>Pieces Clicker - ÉDITION DÉVELOPPEUR</title>
     <style>
         body { margin: 0; padding: 0; display: flex; height: 100vh; font-family: sans-serif; background-color: #0f0c29; color: white; overflow: hidden; }
         #credits { position: fixed; top: 10px; right: 20px; font-size: 0.9rem; color: #ffcc00; font-weight: bold; z-index: 1000; text-shadow: 0 0 5px black; }
@@ -20,9 +20,10 @@
         .boutique { background: #16213e; padding: 10px; border-radius: 15px; width: 450px; margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
         .shop-btn { padding: 8px; cursor: pointer; font-weight: bold; border-radius: 8px; border: none; font-size: 0.7rem; color: white; background: #1e272e; }
         .full { grid-column: span 2; }
-        #btn-event { background: linear-gradient(45deg, #ff0000, #ffcc00); color: white; display: none; border: 2px solid gold; animation: flash 1s infinite; }
+        #btn-event { background: linear-gradient(45deg, #ff0000, #ffcc00); color: white; display: none; border: 2px solid gold; animation: flash 1s infinite; margin-bottom: 5px; }
         @keyframes flash { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
         #save-notif { position: fixed; bottom: 10px; right: 10px; background: #2ecc71; color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; display: none; z-index: 30000; }
+        .dev-tag { color: #ff4757; font-weight: bold; text-shadow: 0 0 5px red; }
     </style>
 </head>
 <body>
@@ -59,37 +60,50 @@
             <button class="shop-btn full" style="background:#6c5ce7" onclick="acheterDominion()">👑 DOMINION INDUSTRIEL (1 Milliard)</button>
         </div>
     </div>
+
     <script>
         let pieces = 0, total = 0, lvl = 1, force = 1, robots = 0, fermes = 0, usines = 0, pseudo = "";
-        let xpPalier = 1000, bots = [];
+        let xpPalier = 1000, bots = [], isDev = false;
         
-        // --- DATE DE FIN FIXE (Année, Mois-1, Jour, Heure, Minute) ---
-        // Ici : 25 Mars 2026 à 20h00
-        const dateFinEvenement = new Date(2026, 2, 25, 20, 0, 0).getTime();
+        const dateFinEvenement = new Date(2026, 2, 24, 20, 30, 0).getTime();
 
         function sauver() {
-            let stats = { pieces, total, lvl, force, robots, fermes, usines, pseudo, xpPalier };
-            localStorage.setItem("clickerSave_V25", JSON.stringify(stats));
+            let stats = { pieces, total, lvl, force, robots, fermes, usines, pseudo, xpPalier, isDev };
+            localStorage.setItem("clickerSave_V26", JSON.stringify(stats));
             document.getElementById('save-notif').style.display = 'block';
             setTimeout(() => document.getElementById('save-notif').style.display = 'none', 1500);
         }
 
         function charger() {
-            let s = JSON.parse(localStorage.getItem("clickerSave_V25"));
+            let s = JSON.parse(localStorage.getItem("clickerSave_V26"));
             if(s) {
                 pieces = s.pieces; total = s.total; lvl = s.lvl;
                 force = s.force; robots = s.robots; fermes = s.fermes;
                 usines = s.usines || 0; pseudo = s.pseudo; xpPalier = s.xpPalier;
+                isDev = s.isDev || false;
                 return true;
             }
             return false;
         }
 
         function lancerJeu() {
-            if(!charger()) { pseudo = prompt("Ton pseudo :") || "Joueur"; }
+            if(!charger()) { 
+                pseudo = prompt("Ton pseudo :") || "Joueur";
+                // --- VÉRIFICATION DU CODE DÉVELOPPEUR ---
+                if(pseudo === "Valentin_Dev") {
+                    isDev = true;
+                    pieces = 10000000; // 10 millions
+                    lvl = 100;
+                    force = 5000;
+                    alert("✅ MODE DÉVELOPPEUR ACTIVÉ ! Bienvenue Valentin.");
+                }
+            }
             for(let i=0; i<30; i++) bots.push({n: "Bot_" + Math.floor(Math.random()*999), a: Math.floor(Math.random()*2000), l: 1});
             document.getElementById('menu-accueil').style.display = 'none';
-            setInterval(() => { let g = (robots*3)+(fermes*30)+(usines*8000); if(g>0){ pieces+=g; total+=g; actualiser(); } }, 1000);
+            setInterval(() => { 
+                let g = (robots*3)+(fermes*30)+(usines*8000); 
+                if(g>0){ pieces+=g; total+=g; actualiser(); } 
+            }, 1000);
             setInterval(verifierEvenement, 1000);
             setInterval(sauver, 10000);
             actualiser();
@@ -98,22 +112,18 @@
         function cliquer() {
             let gain = (force + (lvl * 2)) * (1 + (lvl * 0.10));
             pieces += gain; total += gain;
-            while(total >= xpPalier) { lvl++; xpPalier *= 2; if(lvl%10==0) { pieces /= 2; alert("TAXE NIVEAU ! -50% 💰"); } }
+            while(total >= xpPalier) { lvl++; xpPalier *= 2; }
             actualiser();
         }
 
         function verifierEvenement() {
             let btn = document.getElementById('btn-event');
-            let maintenant = new Date().getTime();
-            let restant = dateFinEvenement - maintenant;
-
+            let restant = dateFinEvenement - Date.now();
             if (restant > 0) {
                 btn.style.display = "block";
                 let h = Math.floor(restant / 3600000), m = Math.floor((restant % 3600000) / 60000), s = Math.floor((restant % 60000) / 1000);
-                btn.innerText = `🎁 +1 NIV. GRATUIT (FIN GLOBALE : ${h}h ${m}m ${s}s)`;
-            } else { 
-                btn.style.display = "none"; 
-            }
+                btn.innerText = `🎁 +1 NIV. GRATUIT (FIN : ${h}h ${m}m ${s}s)`;
+            } else { btn.style.display = "none"; }
         }
 
         function clicEvent() { total = xpPalier; lvl++; xpPalier *= 2; actualiser(); }
@@ -130,11 +140,15 @@
             document.getElementById('score').innerText = Math.floor(pieces).toLocaleString();
             document.getElementById('info-lvl').innerText = "Niveau " + lvl;
             document.getElementById('next-lvl').innerText = "Objectif: " + Math.floor(xpPalier).toLocaleString();
-            let d = [...bots, {n: "⭐ " + pseudo, a: Math.floor(pieces), l: lvl}];
+            
+            let nomAffiche = isDev ? `<span class="dev-tag">[DEV] ${pseudo}</span>` : pseudo;
+            let d = [...bots, {n: nomAffiche, a: Math.floor(pieces), l: lvl, isMe: true}];
+            
             let cR = [...d].sort((a,b) => b.a - a.a);
-            document.getElementById('liste-richesse').innerHTML = cR.map((g, i) => `<div style="font-size:0.75rem; padding:3px; border-bottom:1px solid #222; display:flex; justify-content:space-between; ${g.n.includes(pseudo)?'color:#ffcc00; font-weight:bold;':''}"><span>#${i+1} ${g.n}</span><span>${Math.floor(g.a).toLocaleString()}</span></div>`).join('');
+            document.getElementById('liste-richesse').innerHTML = cR.map((g, i) => `<div style="font-size:0.75rem; padding:3px; border-bottom:1px solid #222; display:flex; justify-content:space-between; ${g.isMe?'background:rgba(255,255,255,0.1)':''}"><span>#${i+1} ${g.n}</span><span>${Math.floor(g.a).toLocaleString()}</span></div>`).join('');
+            
             let cL = [...d].sort((a,b) => b.l - a.l);
-            document.getElementById('liste-niveaux').innerHTML = cL.map((g, i) => `<div style="font-size:0.75rem; padding:3px; border-bottom:1px solid #222; display:flex; justify-content:space-between; ${g.n.includes(pseudo)?'color:#a29bfe; font-weight:bold;':''}"><span>#${i+1} ${g.n}</span><span>Lvl ${g.l}</span></div>`).join('');
+            document.getElementById('liste-niveaux').innerHTML = cL.map((g, i) => `<div style="font-size:0.75rem; padding:3px; border-bottom:1px solid #222; display:flex; justify-content:space-between; ${g.isMe?'background:rgba(255,255,255,0.1)':''}"><span>#${i+1} ${g.n}</span><span>Lvl ${g.l}</span></div>`).join('');
         }
     </script>
 </body>
