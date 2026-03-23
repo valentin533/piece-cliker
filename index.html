@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Pieces Clicker - ADMIN EDITION</title>
+    <title>Pieces Clicker - ÉDITION SUPRÊME</title>
     <style>
         body { margin: 0; padding: 0; display: flex; height: 100vh; font-family: sans-serif; background-color: #0f0c29; color: white; overflow: hidden; }
         #credits { position: fixed; top: 10px; right: 20px; font-size: 0.9rem; color: #ffcc00; font-weight: bold; z-index: 1000; text-shadow: 0 0 5px black; }
@@ -10,10 +10,6 @@
         .tab-container { height: 180px; overflow-y: auto; margin-bottom: 10px; border: 1px solid #333; padding: 5px; background: #050505; }
         .tab-title { color: #00d2ff; text-align: center; font-size: 0.8rem; margin: 5px 0; text-transform: uppercase; border-bottom: 1px solid #00d2ff; }
         #chat-box { flex-grow: 1; background: rgba(0,0,0,0.8); border: 1px solid #555; margin-top: 5px; padding: 5px; font-size: 0.75rem; overflow-y: auto; color: #aaa; }
-        .chat-msg { margin-bottom: 3px; border-bottom: 1px solid #222; }
-        .chat-bot { color: #00d2ff; font-weight: bold; }
-        #menu-accueil { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1b1464, #0f0c29); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
-        #btn-play { padding: 20px 60px; font-size: 2rem; background: #2ecc71; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 0 20px #2ecc71; }
         #game-container { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
         #zone-clic { text-align: center; cursor: pointer; border: 8px solid #ffcc00; border-radius: 50%; width: 120px; height: 120px; display: flex; flex-direction: column; justify-content: center; background: rgba(255, 204, 0, 0.1); transition: transform 0.05s; }
         #zone-clic:active { transform: scale(0.9); }
@@ -21,7 +17,11 @@
         .shop-btn { padding: 8px; cursor: pointer; font-weight: bold; border-radius: 8px; border: none; font-size: 0.7rem; color: white; background: #1e272e; }
         .full { grid-column: span 2; }
         #btn-event { background: linear-gradient(45deg, #ff0000, #ffcc00); color: white; display: none; border: 2px solid gold; animation: flash 1s infinite; margin-bottom: 5px; }
-        #btn-admin { background: linear-gradient(45deg, #6c5ce7, #a29bfe); color: white; display: none; border: 2px dashed white; margin-bottom: 10px; }
+        
+        /* Styles Admin Valentin */
+        #btn-admin-lvl { background: linear-gradient(45deg, #6c5ce7, #a29bfe); color: white; display: none; border: 2px dashed white; margin-bottom: 5px; }
+        #btn-admin-diamant { background: linear-gradient(45deg, #00dbde, #4834d4); color: white; display: none; border: 2px solid #00dbde; margin-bottom: 10px; box-shadow: 0 0 15px #00dbde; }
+        
         @keyframes flash { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
         #save-notif { position: fixed; bottom: 10px; right: 10px; background: #2ecc71; color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; display: none; z-index: 30000; }
         .dev-tag { color: #ff4757; font-weight: bold; text-shadow: 0 0 5px red; }
@@ -51,7 +51,8 @@
         <p id="info-lvl" style="color:#00ffcc; margin:10px 0 2px 0; font-weight:bold;">Niveau 1</p>
         <p id="next-lvl" style="font-size:0.7rem; color:#aaa;">Objectif: 1,000</p>
         <div class="boutique">
-            <button id="btn-admin" class="shop-btn full" onclick="adminBoost()">💎 ADMIN : +10 000 NIVEAUX GRATUITS</button>
+            <button id="btn-admin-lvl" class="shop-btn full" onclick="adminBoost()">💎 ADMIN : +10 000 NIVEAUX GRATUITS</button>
+            <button id="btn-admin-diamant" class="shop-btn full" onclick="adminDiamant()">💎 ADMIN : 150 DIAMANTS (+150M FORCE)</button>
             
             <button id="btn-event" class="shop-btn full" onclick="clicEvent()">🎁 ÉVÉNEMENT GLOBAL</button>
             <button class="shop-btn" style="background:#00d2ff" onclick="acheterForce()">Force +1 (50)</button>
@@ -72,13 +73,13 @@
 
         function sauver() {
             let stats = { pieces, total, lvl, force, robots, fermes, usines, pseudo, xpPalier, isDev };
-            localStorage.setItem("clickerSave_V27", JSON.stringify(stats));
+            localStorage.setItem("clickerSave_V28", JSON.stringify(stats));
             document.getElementById('save-notif').style.display = 'block';
             setTimeout(() => document.getElementById('save-notif').style.display = 'none', 1500);
         }
 
         function charger() {
-            let s = JSON.parse(localStorage.getItem("clickerSave_V27"));
+            let s = JSON.parse(localStorage.getItem("clickerSave_V28"));
             if(s) {
                 pieces = s.pieces; total = s.total; lvl = s.lvl;
                 force = s.force; robots = s.robots; fermes = s.fermes;
@@ -99,7 +100,10 @@
                     force = 5000;
                 }
             }
-            if(isDev) document.getElementById('btn-admin').style.display = "block";
+            if(isDev) {
+                document.getElementById('btn-admin-lvl').style.display = "block";
+                document.getElementById('btn-admin-diamant').style.display = "block";
+            }
             
             for(let i=0; i<30; i++) bots.push({n: "Bot_" + Math.floor(Math.random()*999), a: Math.floor(Math.random()*2000), l: 1});
             document.getElementById('menu-accueil').style.display = 'none';
@@ -118,7 +122,6 @@
             while(total >= xpPalier) { 
                 lvl++; 
                 xpPalier *= 2; 
-                // TAXE DÉSACTIVÉE POUR LE DEV
                 if(lvl%10==0 && !isDev) { 
                     pieces /= 2; 
                     alert("TAXE NIVEAU ! -50% 💰"); 
@@ -127,12 +130,16 @@
             actualiser();
         }
 
+        // --- POUVOIRS ADMIN ---
         function adminBoost() {
+            if(isDev) { lvl += 10000; actualiser(); alert("🚀 +10 000 Niveaux !"); }
+        }
+
+        function adminDiamant() {
             if(isDev) {
-                lvl += 10000;
-                xpPalier = total + 1000; // Ajuste le prochain palier
+                force += 150000000; // 150 millions
                 actualiser();
-                alert("🚀 BOUM ! +10 000 Niveaux pour le chef !");
+                alert("💎 150 DIAMANTS ACTIVÉS ! Force +150 000 000");
             }
         }
 
@@ -147,7 +154,6 @@
         }
 
         function clicEvent() { total = xpPalier; lvl++; xpPalier *= 2; actualiser(); }
-
         function acheterForce() { if(pieces >= 50) { pieces -= 50; force += 1; actualiser(); } }
         function acheterMegaForce() { if(pieces >= 500) { pieces -= 500; force += 1000; actualiser(); } }
         function acheterRobot() { if(pieces >= 100) { pieces -= 100; robots++; actualiser(); } }
