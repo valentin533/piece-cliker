@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Pieces Clicker - Valentin & Gemini (V21 COMPLÈTE)</title>
+    <style>
+        body { margin: 0; padding: 0; display: flex; height: 100vh; font-family: sans-serif; background-color: #0f0c29; color: white; overflow: hidden; }
+        #credits { position: fixed; top: 10px; right: 20px; font-size: 0.9rem; color: #ffcc00; font-weight: bold; z-index: 1000; text-shadow: 0 0 5px black; }
+        
+        /* BOUTON ET FENETRE INDEX */
+        #btn-index { position: fixed; top: 10px; left: 340px; padding: 8px 15px; background: #34495e; color: white; border: 2px solid #00d2ff; cursor: pointer; border-radius: 5px; font-weight: bold; z-index: 1001; }
+        #fenetre-index { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 70%; height: 70%; background: rgba(0,0,0,0.95); border: 3px solid #00d2ff; display: none; z-index: 20000; padding: 20px; overflow-y: auto; border-radius: 15px; }
+        .index-item { margin-bottom: 12px; border-bottom: 1px solid #333; padding-bottom: 8px; font-size: 0.9rem; }
+        .index-name { color: #ffcc00; font-weight: bold; }
+
+        /* SIDEBAR */
+        #sidebar { width: 320px; background: rgba(0,0,0,0.9); border-right: 2px solid #00d2ff; padding: 10px; display: flex; flex-direction: column; }
+        .tab-container { height: 180px; overflow-y: auto; margin-bottom: 10px; border: 1px solid #333; padding: 5px; background: #050505; }
+        .tab-title { color: #00d2ff; text-align: center; font-size: 0.8rem; margin: 5px 0; text-transform: uppercase; border-bottom: 1px solid #00d2ff; }
+        #chat-box { flex-grow: 1; background: rgba(0,0,0,0.8); border: 1px solid #555; margin-top: 5px; padding: 5px; font-size: 0.75rem; overflow-y: auto; color: #aaa; }
+        .chat-msg { margin-bottom: 3px; border-bottom: 1px solid #222; }
+        .chat-bot { color: #00d2ff; font-weight: bold; }
+
+        /* JEU */
+        #menu-accueil { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1b1464, #0f0c29); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
+        #btn-play { padding: 20px 60px; font-size: 2rem; background: #2ecc71; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 0 20px #2ecc71; }
+        #game-container { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+        #zone-clic { text-align: center; cursor: pointer; border: 8px solid #ffcc00; border-radius: 50%; width: 120px; height: 120px; display: flex; flex-direction: column; justify-content: center; background: rgba(255, 204, 0, 0.1); transition: transform 0.05s; }
+        #zone-clic:active { transform: scale(0.9); }
+
+        /* BOUTIQUE GRID */
+        .boutique { background: #16213e; padding: 10px; border-radius: 15px; width: 450px; margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+        .shop-btn { padding: 8px; cursor: pointer; font-weight: bold; border-radius: 8px; border: none; font-size: 0.7rem; color: white; background: #1e272e; }
+        .full { grid-column: span 2; }
+        #save-notif { position: fixed; bottom: 10px; right: 10px; background: #2ecc71; color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; display: none; z-index: 30000; }
+    </style>
+</head>
+<body>
+
+    <div id="credits">Développé par Valentin & Gemini</div>
+    <div id="save-notif">💾 Partie sauvegardée !</div>
+
+    <button id="btn-index" onclick="toggleIndex()">📖 INDEX</button>
+
+    <div id="fenetre-index">
+        <h2 style="color:#00d2ff; text-align:center;">MANUEL DES BOUTONS</h2>
+        <div class="index-item"><span class="index-name">🚀 MÉGA CLIC :</span> Donne un boost massif de +1000 à ta force.</div>
+        <div class="index-item"><span class="index-name">💎 CRISTAL :</span> Le prestige ! +1 Million de clic permanent.</div>
+        <div class="index-item"><span class="index-name">👑 DOMINION :</span> Achète 1500 Usines d'un coup.</div>
+        <div class="index-item"><span class="index-name">🤖 ROBOT / 🚜 FERME :</span> Tes premiers revenus automatiques par seconde.</div>
+        <div class="index-item"><span class="index-name">📈 BONUS LVL :</span> Chaque niveau augmente tes gains de 10%.</div>
+        <button onclick="toggleIndex()" style="width:100%; padding:10px; background:#e74c3c; color:white; border:none; cursor:pointer;">FERMER</button>
+    </div>
+
+    <div id="menu-accueil">
+        <h1 style="color:#ffcc00; font-size: 3rem;">PIECES CLICKER</h1>
+        <button id="btn-play" onclick="lancerJeu()">JOUER / CHARGER</button>
+        <button onclick="if(confirm('Reset tout ?')) { localStorage.clear(); location.reload(); }" style="margin-top:20px; color:red; background:none; border:1px solid red; cursor:pointer;">Réinitialiser</button>
+    </div>
+
+    <div id="sidebar">
+        <div class="tab-title">🏆 Top Richesse</div>
+        <div id="liste-richesse" class="tab-container"></div>
+        <div class="tab-title" style="color:#a29bfe">🎖️ Top Niveaux</div>
+        <div id="liste-niveaux" class="tab-container"></div>
+        <div class="tab-title" style="color:#ffcc00">💬 CHAT DU SERVEUR</div>
+        <div id="chat-box"></div>
+    </div>
+
+    <div id="game-container">
+        <div id="zone-clic" onclick="cliquer()">
+            <h1 id="score" style="margin:0; color:#ffcc00">0</h1>
+            <div style="font-weight:bold; font-size:0.8rem">PIÈCES</div>
+        </div>
+        <p id="info-lvl" style="color:#00ffcc; margin:10px 0 2px 0; font-weight:bold;">Niveau 1</p>
+        <p id="next-lvl" style="font-size:0.7rem; color:#aaa;">Objectif: 1,000</p>
+        
+        <div class="boutique">
+            <button class="shop-btn full" style="background:#2ff32f; color:black" onclick="cadeauNiveaux()">🎁 +10 NIVEAUX GRATUITS</button>
+            <button class="shop-btn" style="background:#00d2ff" onclick="acheterForce()">Force +1 (50)</button>
+            <button class="shop-btn" style="background:#ff006e" onclick="acheterMegaForce()">🚀 MÉGA CLIC (500)</button>
+            <button class="shop-btn" style="background:#3498db" onclick="acheterRobot()">Robot +3/s (100)</button>
+            <button class="shop-btn" style="background:#a29bfe" onclick="acheterFerme()">Ferme +30/s (2.5k)</button>
+            <button class="shop-btn" style="background:#e67e22" onclick="acheterUsine()">Usine +8k/s (50k)</button>
+            <button class="shop-btn full" style="background:linear-gradient(45deg,#00dbde,#fc00ff)" onclick="acheterCristal()">💎 CRISTAL INFINI (50M)</button>
+            <button class="shop-btn full" style="background:#6c5ce7" onclick="acheterDominion()">👑 DOMINION INDUSTRIEL (1 Milliard)</button>
+        </div>
+    </div>
+
+    <script>
+        let pieces = 0, total = 0, lvl = 1, force = 1, robots = 0, fermes = 0, usines = 0, pseudo = "";
+        let xpPalier = 1000, bots = [];
+        const phrases = ["Je vais être n°1 !", "Valentin est trop fort...", "Mdr je suis riche", "Regardez mon score !", "Salut le chat !", "Je vais tout acheter !", "Qui a plus de 1M ?"];
+
+        function toggleIndex() {
+            let idx = document.getElementById('fenetre-index');
+            idx.style.display = (idx.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function sauver() {
+            let stats = { pieces, total, lvl, force, robots, fermes, usines, pseudo, xpPalier };
+            localStorage.setItem("clickerSave_Final", JSON.stringify(stats));
+            document.getElementById('save-notif').style.display = 'block';
+            setTimeout(() => document.getElementById('save-notif').style.display = 'none', 1500);
+        }
+
+        function charger() {
+            let s = JSON.parse(localStorage.getItem("clickerSave_Final"));
+            if(s) {
+                pieces = s.pieces; total = s.total; lvl = s.lvl;
+                force = s.force; robots = s.robots; fermes = s.fermes;
+                usines = s.usines || 0; pseudo = s.pseudo; xpPalier = s.xpPalier;
+                return true;
+            }
+            return false;
+        }
+
+        function lancerJeu() {
+            if(!charger()) pseudo = prompt("Ton pseudo :") || "Joueur";
+            for(let i=0; i<30; i++) bots.push({n: "Bot_" + Math.floor(Math.random()*999), a: Math.floor(Math.random()*2000), l: 1});
+            document.getElementById('menu-accueil').style.display = 'none';
+            setInterval(() => { bots.forEach(b => { b.a += Math.floor(Math.random()*500*b.l); if(Math.random()>0.97) b.l++; }); actualiser(); }, 3000);
+            setInterval(() => { let b = bots[Math.floor(Math.random()*bots.length)]; const c = document.getElementById('chat-box'); c.innerHTML += `<div class="chat-msg"><span class="chat-bot">${b.n}:</span> ${phrases[Math.floor(Math.random()*phrases.length)]}</div>`; c.scrollTop = c.scrollHeight; }, 6000);
+            setInterval(() => { let g = (robots*3)+(fermes*30)+(usines*8000); if(g>0){ pieces+=g; total+=g; actualiser(); } }, 1000);
+            setInterval(sauver, 10000);
+            actualiser();
+        }
+
+        function cliquer() {
+            let gain = (force + (lvl * 2)) * (1 + (lvl * 0.10));
+            pieces += gain; total += gain;
+            while(total >= xpPalier) { lvl++; xpPalier *= 2; if(lvl%10==0) { pieces /= 2; alert("TAXE NIVEAU ! -50% 💰"); } }
+            actualiser();
+        }
+
+        function acheterForce() { if(pieces >= 50) { pieces -= 50; force += 1; actualiser(); } }
+        function acheterMegaForce() { if(pieces >= 500) { pieces -= 500; force += 1000; actualiser(); } }
+        function acheterRobot() { if(pieces >= 100) { pieces -= 100; robots++; actualiser(); } }
+        function acheterFerme() { if(pieces >= 2500) { pieces -= 2500; fermes++; actualiser(); } }
+        function acheterUsine() { if(pieces >= 50000) { pieces -= 50000; usines++; actualiser(); } }
+        function acheterCristal() { if(pieces >= 50000000) { pieces -= 50000000; force += 1000000; actualiser(); } }
+        function acheterDominion() { if(pieces >= 1000000000) { pieces -= 1000000000; usines += 1500; actualiser(); } }
+        function cadeauNiveaux() { for(let i=0; i<10; i++){ total = xpPalier; lvl++; xpPalier *= 2; } actualiser(); }
+
+        function actualiser() {
+            document.getElementById('score').innerText = Math.floor(pieces).toLocaleString();
+            document.getElementById('info-lvl').innerText = "Niveau " + lvl;
+            document.getElementById('next-lvl').innerText = "Objectif: " + Math.floor(xpPalier).toLocaleString();
+            let d = [...bots, {n: "⭐ " + pseudo, a: Math.floor(pieces), l: lvl}];
+            let cR = [...d].sort((a,b) => b.a - a.a);
+            document.getElementById('liste-richesse').innerHTML = cR.map((g, i) => `<div style="font-size:0.75rem; padding:3px; border-bottom:1px solid #222; display:flex; justify-content:space-between; ${g.n.includes(pseudo)?'color:#ffcc00; font-weight:bold;':''}"><span>#${i+1} ${g.n}</span><span>${Math.floor(g.a).toLocaleString()}</span></div>`).join('');
+            let cL = [...d].sort((a,b) => b.l - a.l);
+            document.getElementById('liste-niveaux').innerHTML = cL.map((g, i) => `<div style="font-size:0.75rem; padding:3px; border-bottom:1px solid #222; display:flex; justify-content:space-between; ${g.n.includes(pseudo)?'color:#a29bfe; font-weight:bold;':''}"><span>#${i+1} ${g.n}</span><span>Lvl ${g.l}</span></div>`).join('');
+        }
+    </script>
+</body>
+</html>
