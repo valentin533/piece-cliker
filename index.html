@@ -2,25 +2,32 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Pieces Clicker - ÉDITION SUPRÊME</title>
+    <title>Pieces Clicker - ADMIN EDITION V28</title>
     <style>
         body { margin: 0; padding: 0; display: flex; height: 100vh; font-family: sans-serif; background-color: #0f0c29; color: white; overflow: hidden; }
         #credits { position: fixed; top: 10px; right: 20px; font-size: 0.9rem; color: #ffcc00; font-weight: bold; z-index: 1000; text-shadow: 0 0 5px black; }
+        
+        /* MENU D'ACCUEIL */
+        #menu-accueil { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1b1464, #0f0c29); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
+        #btn-play { padding: 25px 80px; font-size: 2.2rem; background: #2ecc71; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 0 30px #2ecc71; transition: transform 0.2s; }
+        #btn-play:hover { transform: scale(1.1); }
+        
         #sidebar { width: 320px; background: rgba(0,0,0,0.9); border-right: 2px solid #00d2ff; padding: 10px; display: flex; flex-direction: column; }
         .tab-container { height: 180px; overflow-y: auto; margin-bottom: 10px; border: 1px solid #333; padding: 5px; background: #050505; }
         .tab-title { color: #00d2ff; text-align: center; font-size: 0.8rem; margin: 5px 0; text-transform: uppercase; border-bottom: 1px solid #00d2ff; }
-        #chat-box { flex-grow: 1; background: rgba(0,0,0,0.8); border: 1px solid #555; margin-top: 5px; padding: 5px; font-size: 0.75rem; overflow-y: auto; color: #aaa; }
-        #game-container { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
-        #zone-clic { text-align: center; cursor: pointer; border: 8px solid #ffcc00; border-radius: 50%; width: 120px; height: 120px; display: flex; flex-direction: column; justify-content: center; background: rgba(255, 204, 0, 0.1); transition: transform 0.05s; }
-        #zone-clic:active { transform: scale(0.9); }
-        .boutique { background: #16213e; padding: 10px; border-radius: 15px; width: 450px; margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
-        .shop-btn { padding: 8px; cursor: pointer; font-weight: bold; border-radius: 8px; border: none; font-size: 0.7rem; color: white; background: #1e272e; }
-        .full { grid-column: span 2; }
-        #btn-event { background: linear-gradient(45deg, #ff0000, #ffcc00); color: white; display: none; border: 2px solid gold; animation: flash 1s infinite; margin-bottom: 5px; }
         
-        /* Styles Admin Valentin */
-        #btn-admin-lvl { background: linear-gradient(45deg, #6c5ce7, #a29bfe); color: white; display: none; border: 2px dashed white; margin-bottom: 5px; }
-        #btn-admin-diamant { background: linear-gradient(45deg, #00dbde, #4834d4); color: white; display: none; border: 2px solid #00dbde; margin-bottom: 10px; box-shadow: 0 0 15px #00dbde; }
+        #game-container { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+        #zone-clic { text-align: center; cursor: pointer; border: 8px solid #ffcc00; border-radius: 50%; width: 140px; height: 140px; display: flex; flex-direction: column; justify-content: center; background: rgba(255, 204, 0, 0.1); transition: transform 0.05s; }
+        #zone-clic:active { transform: scale(0.9); }
+        
+        .boutique { background: #16213e; padding: 15px; border-radius: 15px; width: 450px; margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .shop-btn { padding: 10px; cursor: pointer; font-weight: bold; border-radius: 8px; border: none; font-size: 0.75rem; color: white; background: #1e272e; }
+        .full { grid-column: span 2; }
+        
+        /* BOUTONS SPÉCIAUX */
+        #btn-event { background: linear-gradient(45deg, #ff0000, #ffcc00); animation: flash 1s infinite; margin-bottom: 5px; }
+        #btn-admin-lvl { background: linear-gradient(45deg, #6c5ce7, #a29bfe); display: none; border: 2px dashed white; }
+        #btn-admin-diamant { background: linear-gradient(45deg, #00dbde, #4834d4); display: none; border: 2px solid #00dbde; box-shadow: 0 0 15px #00dbde; }
         
         @keyframes flash { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
         #save-notif { position: fixed; bottom: 10px; right: 10px; background: #2ecc71; color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; display: none; z-index: 30000; }
@@ -30,149 +37,29 @@
 <body>
     <div id="credits">Développé par Valentin & Gemini</div>
     <div id="save-notif">💾 Partie sauvegardée !</div>
+
     <div id="menu-accueil">
-        <h1 style="color:#ffcc00; font-size: 3rem;">PIECES CLICKER</h1>
+        <h1 style="color:#ffcc00; font-size: 4rem; margin-bottom: 10px; text-shadow: 0 0 20px rgba(255,204,0,0.5);">PIECES CLICKER</h1>
+        <p style="color: #00d2ff; margin-bottom: 30px; letter-spacing: 2px;">ÉDITION VALENTIN & GEMINI</p>
         <button id="btn-play" onclick="lancerJeu()">JOUER / CHARGER</button>
-        <button onclick="if(confirm('Reset tout ?')) { localStorage.clear(); location.reload(); }" style="margin-top:20px; color:red; background:none; border:1px solid red; cursor:pointer;">Réinitialiser</button>
+        <button onclick="if(confirm('RESET TOTAL ? (Tu perdras tout)')) { localStorage.clear(); location.reload(); }" style="margin-top:40px; color:#ff4757; background:none; border:1px solid #ff4757; cursor:pointer; padding: 5px 15px; border-radius: 5px;">Réinitialiser la progression</button>
     </div>
+
     <div id="sidebar">
         <div class="tab-title">🏆 Top Richesse</div>
         <div id="liste-richesse" class="tab-container"></div>
         <div class="tab-title" style="color:#a29bfe">🎖️ Top Niveaux</div>
         <div id="liste-niveaux" class="tab-container"></div>
-        <div class="tab-title" style="color:#ffcc00">💬 CHAT DU SERVEUR</div>
-        <div id="chat-box"></div>
     </div>
+
     <div id="game-container">
         <div id="zone-clic" onclick="cliquer()">
             <h1 id="score" style="margin:0; color:#ffcc00">0</h1>
-            <div style="font-weight:bold; font-size:0.8rem">PIÈCES</div>
+            <div style="font-weight:bold; font-size:0.9rem">PIÈCES</div>
         </div>
-        <p id="info-lvl" style="color:#00ffcc; margin:10px 0 2px 0; font-weight:bold;">Niveau 1</p>
-        <p id="next-lvl" style="font-size:0.7rem; color:#aaa;">Objectif: 1,000</p>
-        <div class="boutique">
-            <button id="btn-admin-lvl" class="shop-btn full" onclick="adminBoost()">💎 ADMIN : +10 000 NIVEAUX GRATUITS</button>
-            <button id="btn-admin-diamant" class="shop-btn full" onclick="adminDiamant()">💎 ADMIN : 150 DIAMANTS (+150M FORCE)</button>
-            
-            <button id="btn-event" class="shop-btn full" onclick="clicEvent()">🎁 ÉVÉNEMENT GLOBAL</button>
-            <button class="shop-btn" style="background:#00d2ff" onclick="acheterForce()">Force +1 (50)</button>
-            <button class="shop-btn" style="background:#ff006e" onclick="acheterMegaForce()">🚀 MÉGA CLIC (500)</button>
-            <button class="shop-btn" style="background:#3498db" onclick="acheterRobot()">Robot +3/s (100)</button>
-            <button class="shop-btn" style="background:#a29bfe" onclick="acheterFerme()">Ferme +30/s (2.5k)</button>
-            <button class="shop-btn" style="background:#e67e22" onclick="acheterUsine()">Usine +8k/s (50k)</button>
-            <button class="shop-btn full" style="background:linear-gradient(45deg,#00dbde,#fc00ff)" onclick="acheterCristal()">💎 CRISTAL INFINI (50M)</button>
-            <button class="shop-btn full" style="background:#6c5ce7" onclick="acheterDominion()">👑 DOMINION INDUSTRIEL (1 Milliard)</button>
-        </div>
-    </div>
-
-    <script>
-        let pieces = 0, total = 0, lvl = 1, force = 1, robots = 0, fermes = 0, usines = 0, pseudo = "";
-        let xpPalier = 1000, bots = [], isDev = false;
+        <p id="info-lvl" style="color:#00ffcc; margin:15px 0 2px 0; font-weight:bold; font-size: 1.2rem;">Niveau 1</p>
+        <p id="next-lvl" style="font-size:0.8rem; color:#aaa;">Objectif: 1,000</p>
         
-        const dateFinEvenement = new Date(2026, 2, 24, 20, 30, 0).getTime();
-
-        function sauver() {
-            let stats = { pieces, total, lvl, force, robots, fermes, usines, pseudo, xpPalier, isDev };
-            localStorage.setItem("clickerSave_V28", JSON.stringify(stats));
-            document.getElementById('save-notif').style.display = 'block';
-            setTimeout(() => document.getElementById('save-notif').style.display = 'none', 1500);
-        }
-
-        function charger() {
-            let s = JSON.parse(localStorage.getItem("clickerSave_V28"));
-            if(s) {
-                pieces = s.pieces; total = s.total; lvl = s.lvl;
-                force = s.force; robots = s.robots; fermes = s.fermes;
-                usines = s.usines || 0; pseudo = s.pseudo; xpPalier = s.xpPalier;
-                isDev = s.isDev || false;
-                return true;
-            }
-            return false;
-        }
-
-        function lancerJeu() {
-            if(!charger()) { 
-                pseudo = prompt("Ton pseudo :") || "Joueur";
-                if(pseudo === "Valentin_Dev") {
-                    isDev = true;
-                    pieces = 10000000;
-                    lvl = 100;
-                    force = 5000;
-                }
-            }
-            if(isDev) {
-                document.getElementById('btn-admin-lvl').style.display = "block";
-                document.getElementById('btn-admin-diamant').style.display = "block";
-            }
-            
-            for(let i=0; i<30; i++) bots.push({n: "Bot_" + Math.floor(Math.random()*999), a: Math.floor(Math.random()*2000), l: 1});
-            document.getElementById('menu-accueil').style.display = 'none';
-            setInterval(() => { 
-                let g = (robots*3)+(fermes*30)+(usines*8000); 
-                if(g>0){ pieces+=g; total+=g; actualiser(); } 
-            }, 1000);
-            setInterval(verifierEvenement, 1000);
-            setInterval(sauver, 10000);
-            actualiser();
-        }
-
-        function cliquer() {
-            let gain = (force + (lvl * 2)) * (1 + (lvl * 0.10));
-            pieces += gain; total += gain;
-            while(total >= xpPalier) { 
-                lvl++; 
-                xpPalier *= 2; 
-                if(lvl%10==0 && !isDev) { 
-                    pieces /= 2; 
-                    alert("TAXE NIVEAU ! -50% 💰"); 
-                } 
-            }
-            actualiser();
-        }
-
-        // --- POUVOIRS ADMIN ---
-        function adminBoost() {
-            if(isDev) { lvl += 10000; actualiser(); alert("🚀 +10 000 Niveaux !"); }
-        }
-
-        function adminDiamant() {
-            if(isDev) {
-                force += 150000000; // 150 millions
-                actualiser();
-                alert("💎 150 DIAMANTS ACTIVÉS ! Force +150 000 000");
-            }
-        }
-
-        function verifierEvenement() {
-            let btn = document.getElementById('btn-event');
-            let restant = dateFinEvenement - Date.now();
-            if (restant > 0) {
-                btn.style.display = "block";
-                let h = Math.floor(restant / 3600000), m = Math.floor((restant % 3600000) / 60000), s = Math.floor((restant % 60000) / 1000);
-                btn.innerText = `🎁 +1 NIV. GRATUIT (FIN : ${h}h ${m}m ${s}s)`;
-            } else { btn.style.display = "none"; }
-        }
-
-        function clicEvent() { total = xpPalier; lvl++; xpPalier *= 2; actualiser(); }
-        function acheterForce() { if(pieces >= 50) { pieces -= 50; force += 1; actualiser(); } }
-        function acheterMegaForce() { if(pieces >= 500) { pieces -= 500; force += 1000; actualiser(); } }
-        function acheterRobot() { if(pieces >= 100) { pieces -= 100; robots++; actualiser(); } }
-        function acheterFerme() { if(pieces >= 2500) { pieces -= 2500; fermes++; actualiser(); } }
-        function acheterUsine() { if(pieces >= 50000) { pieces -= 50000; usines++; actualiser(); } }
-        function acheterCristal() { if(pieces >= 50000000) { pieces -= 50000000; force += 1000000; actualiser(); } }
-        function acheterDominion() { if(pieces >= 1000000000) { pieces -= 1000000000; usines += 1500; actualiser(); } }
-
-        function actualiser() {
-            document.getElementById('score').innerText = Math.floor(pieces).toLocaleString();
-            document.getElementById('info-lvl').innerText = "Niveau " + lvl;
-            document.getElementById('next-lvl').innerText = "Objectif: " + Math.floor(xpPalier).toLocaleString();
-            let nomAffiche = isDev ? `<span class="dev-tag">[DEV] ${pseudo}</span>` : pseudo;
-            let d = [...bots, {n: nomAffiche, a: Math.floor(pieces), l: lvl, isMe: true}];
-            let cR = [...d].sort((a,b) => b.a - a.a);
-            document.getElementById('liste-richesse').innerHTML = cR.map((g, i) => `<div style="font-size:0.75rem; padding:3px; border-bottom:1px solid #222; display:flex; justify-content:space-between; ${g.isMe?'background:rgba(255,255,255,0.1)':''}"><span>#${i+1} ${g.n}</span><span>${Math.floor(g.a).toLocaleString()}</span></div>`).join('');
-            let cL = [...d].sort((a,b) => b.l - a.l);
-            document.getElementById('liste-niveaux').innerHTML = cL.map((g, i) => `<div style="font-size:0.75rem; padding:3px; border-bottom:1px solid #222; display:flex; justify-content:space-between; ${g.isMe?'background:rgba(255,255,255,0.1)':''}"><span>#${i+1} ${g.n}</span><span>Lvl ${g.l}</span></div>`).join('');
-        }
-    </script>
-</body>
-</html>
+        <div class="boutique">
+            <button id="btn-admin-lvl" class="shop-btn full" onclick="adminBoost()">💎 ADMIN : +10 000 NIVEAUX (GRATUIT)</button>
+            <button id="btn-admin-diamant
