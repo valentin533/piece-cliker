@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Pieces Clicker - ADMIN EDITION V28</title>
+    <title>Pieces Clicker - ADMIN EDITION V29</title>
     <style>
         body { margin: 0; padding: 0; display: flex; height: 100vh; font-family: sans-serif; background-color: #0f0c29; color: white; overflow: hidden; }
         #credits { position: fixed; top: 10px; right: 20px; font-size: 0.9rem; color: #ffcc00; font-weight: bold; z-index: 1000; text-shadow: 0 0 5px black; }
@@ -25,9 +25,9 @@
         .full { grid-column: span 2; }
         
         /* BOUTONS SPÉCIAUX */
-        #btn-event { background: linear-gradient(45deg, #ff0000, #ffcc00); animation: flash 1s infinite; margin-bottom: 5px; }
-        #btn-admin-lvl { background: linear-gradient(45deg, #6c5ce7, #a29bfe); display: none; border: 2px dashed white; }
-        #btn-admin-diamant { background: linear-gradient(45deg, #00dbde, #4834d4); display: none; border: 2px solid #00dbde; box-shadow: 0 0 15px #00dbde; }
+        #btn-event { background: linear-gradient(45deg, #ff0000, #ffcc00); animation: flash 1s infinite; margin-bottom: 5px; display:none; }
+        #btn-admin-lvl { background: linear-gradient(45deg, #6c5ce7, #a29bfe); border: 2px dashed white; display: none; margin-bottom: 5px; }
+        #btn-admin-diamant { background: linear-gradient(45deg, #00dbde, #4834d4); border: 2px solid #00dbde; box-shadow: 0 0 15px #00dbde; display: none; margin-bottom: 5px; }
         
         @keyframes flash { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
         #save-notif { position: fixed; bottom: 10px; right: 10px; background: #2ecc71; color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; display: none; z-index: 30000; }
@@ -39,10 +39,10 @@
     <div id="save-notif">💾 Partie sauvegardée !</div>
 
     <div id="menu-accueil">
-        <h1 style="color:#ffcc00; font-size: 4rem; margin-bottom: 10px; text-shadow: 0 0 20px rgba(255,204,0,0.5);">PIECES CLICKER</h1>
-        <p style="color: #00d2ff; margin-bottom: 30px; letter-spacing: 2px;">ÉDITION VALENTIN & GEMINI</p>
+        <h1 style="color:#ffcc00; font-size: 4rem; margin-bottom: 10px;">PIECES CLICKER</h1>
+        <p style="color: #00d2ff; margin-bottom: 30px;">ÉDITION VALENTIN</p>
         <button id="btn-play" onclick="lancerJeu()">JOUER / CHARGER</button>
-        <button onclick="if(confirm('RESET TOTAL ? (Tu perdras tout)')) { localStorage.clear(); location.reload(); }" style="margin-top:40px; color:#ff4757; background:none; border:1px solid #ff4757; cursor:pointer; padding: 5px 15px; border-radius: 5px;">Réinitialiser la progression</button>
+        <button onclick="if(confirm('RESET ?')) { localStorage.clear(); location.reload(); }" style="margin-top:40px; color:#ff4757; background:none; border:1px solid #ff4757; cursor:pointer;">Réinitialiser</button>
     </div>
 
     <div id="sidebar">
@@ -62,4 +62,99 @@
         
         <div class="boutique">
             <button id="btn-admin-lvl" class="shop-btn full" onclick="adminBoost()">💎 ADMIN : +10 000 NIVEAUX (GRATUIT)</button>
-            <button id="btn-admin-diamant
+            <button id="btn-admin-diamant" class="shop-btn full" onclick="adminDiamant()">💎 ADMIN : +150M FORCE (GRATUIT)</button>
+            <button id="btn-event" class="shop-btn full" onclick="clicEvent()">🎁 ÉVÉNEMENT GLOBAL</button>
+            <button class="shop-btn" style="background:#00d2ff" onclick="acheterForce()">Force +1 (50)</button>
+            <button class="shop-btn" style="background:#ff006e" onclick="acheterMegaForce()">🚀 MÉGA CLIC (500)</button>
+            <button class="shop-btn" style="background:#3498db" onclick="acheterRobot()">Robot +3/s (100)</button>
+            <button class="shop-btn" style="background:#a29bfe" onclick="acheterFerme()">Ferme +30/s (2.5k)</button>
+            <button class="shop-btn" style="background:#e67e22" onclick="acheterUsine()">Usine +8k/s (50k)</button>
+            <button class="shop-btn full" style="background:linear-gradient(45deg,#00dbde,#fc00ff)" onclick="acheterCristal()">💎 CRISTAL INFINI (50M)</button>
+        </div>
+    </div>
+
+    <script>
+        let pieces = 0, total = 0, lvl = 1, force = 1, robots = 0, fermes = 0, usines = 0, pseudo = "";
+        let xpPalier = 1000, bots = [], isDev = false;
+        const dateFinEvenement = new Date(2026, 2, 24, 20, 30, 0).getTime();
+
+        function sauver() {
+            let stats = { pieces, total, lvl, force, robots, fermes, usines, pseudo, xpPalier, isDev };
+            localStorage.setItem("clickerSave_V29", JSON.stringify(stats));
+            document.getElementById('save-notif').style.display = 'block';
+            setTimeout(() => document.getElementById('save-notif').style.display = 'none', 1500);
+        }
+
+        function charger() {
+            let s = JSON.parse(localStorage.getItem("clickerSave_V29"));
+            if(s) {
+                pieces = s.pieces; total = s.total; lvl = s.lvl;
+                force = s.force; robots = s.robots; fermes = s.fermes;
+                usines = s.usines || 0; pseudo = s.pseudo; xpPalier = s.xpPalier;
+                isDev = s.isDev || false;
+                return true;
+            }
+            return false;
+        }
+
+        function lancerJeu() {
+            if(!charger()) { 
+                pseudo = prompt("Pseudo :") || "Joueur";
+                if(pseudo === "Valentin_Dev") {
+                    isDev = true; pieces = 10000000; lvl = 100; force = 5000;
+                }
+            }
+            if(isDev) {
+                document.getElementById('btn-admin-lvl').style.display = "block";
+                document.getElementById('btn-admin-diamant').style.display = "block";
+            }
+            document.getElementById('menu-accueil').style.display = 'none';
+            for(let i=0; i<20; i++) bots.push({n: "Bot_" + Math.floor(Math.random()*999), a: Math.floor(Math.random()*5000), l: 1});
+            setInterval(() => { let g = (robots*3)+(fermes*30)+(usines*8000); if(g>0){ pieces+=g; total+=g; actualiser(); } }, 1000);
+            setInterval(verifierEvenement, 1000);
+            setInterval(sauver, 10000);
+            actualiser();
+        }
+
+        function cliquer() {
+            let gain = (force + (lvl * 2)) * (1 + (lvl * 0.10));
+            pieces += gain; total += gain;
+            while(total >= xpPalier) { lvl++; xpPalier *= 2; if(lvl%10==0 && !isDev) { pieces /= 2; alert("TAXE -50%"); } }
+            actualiser();
+        }
+
+        function adminBoost() { if(isDev) { lvl += 10000; actualiser(); } }
+        function adminDiamant() { if(isDev) { force += 150000000; actualiser(); } }
+
+        function verifierEvenement() {
+            let btn = document.getElementById('btn-event');
+            let restant = dateFinEvenement - Date.now();
+            if (restant > 0) {
+                btn.style.display = "block";
+                let h = Math.floor(restant/3600000), m = Math.floor((restant%3600000)/60000), s = Math.floor((restant%60000)/1000);
+                btn.innerText = `🎁 EVENT : ${h}h ${m}m ${s}s`;
+            } else { btn.style.display = "none"; }
+        }
+
+        function clicEvent() { total = xpPalier; lvl++; xpPalier *= 2; actualiser(); }
+        function acheterForce() { if(pieces >= 50) { pieces -= 50; force += 1; actualiser(); } }
+        function acheterMegaForce() { if(pieces >= 500) { pieces -= 500; force += 1000; actualiser(); } }
+        function acheterRobot() { if(pieces >= 100) { pieces -= 100; robots++; actualiser(); } }
+        function acheterFerme() { if(pieces >= 2500) { pieces -= 2500; fermes++; actualiser(); } }
+        function acheterUsine() { if(pieces >= 50000) { pieces -= 50000; usines++; actualiser(); } }
+        function acheterCristal() { if(pieces >= 50000000) { pieces -= 50000000; force += 1000000; actualiser(); } }
+
+        function actualiser() {
+            document.getElementById('score').innerText = Math.floor(pieces).toLocaleString();
+            document.getElementById('info-lvl').innerText = "Niveau " + lvl;
+            document.getElementById('next-lvl').innerText = "Objectif: " + Math.floor(xpPalier).toLocaleString();
+            let nomAffiche = isDev ? `<span class="dev-tag">[DEV] ${pseudo}</span>` : pseudo;
+            let d = [...bots, {n: nomAffiche, a: pieces, l: lvl, isMe: true}];
+            let cR = [...d].sort((a,b) => b.a - a.a);
+            document.getElementById('liste-richesse').innerHTML = cR.map((g, i) => `<div style="padding:4px; border-bottom:1px solid #222; display:flex; justify-content:space-between; ${g.isMe?'background:rgba(255,255,255,0.1)':''}"><span>#${i+1} ${g.n}</span><span>${Math.floor(g.a).toLocaleString()}</span></div>`).join('');
+            let cL = [...d].sort((a,b) => b.l - a.l);
+            document.getElementById('liste-niveaux').innerHTML = cL.map((g, i) => `<div style="padding:4px; border-bottom:1px solid #222; display:flex; justify-content:space-between; ${g.isMe?'background:rgba(255,255,255,0.1)':''}"><span>#${i+1} ${g.n}</span><span>Lvl ${g.l}</span></div>`).join('');
+        }
+    </script>
+</body>
+</html>
