@@ -2,12 +2,12 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Pieces Clicker - V64 PERMANENT EVENT</title>
+    <title>Pieces Clicker - PHONK EDITION V64</title>
     <style>
         body { margin: 0; padding: 0; display: flex; height: 100vh; font-family: 'Segoe UI', sans-serif; background-color: #0f0c29; color: white; overflow: hidden; }
         #credits { position: fixed; top: 10px; right: 20px; font-size: 0.8rem; color: #ffcc00; z-index: 1000; }
         
-        /* Style de l'Annonce Globale */
+        /* Annonce Globale */
         #global-announcement {
             position: fixed; top: -100px; left: 0; width: 100%; background: white; color: black;
             padding: 20px; text-align: center; font-weight: bold; font-size: 1.5rem;
@@ -28,11 +28,11 @@
         #zone-clic { text-align: center; cursor: pointer; border: 8px solid #ffcc00; border-radius: 50%; width: 130px; height: 130px; display: flex; flex-direction: column; justify-content: center; background: rgba(255, 204, 0, 0.1); transition: transform 0.05s; }
         #zone-clic:active { transform: scale(0.95); }
 
-        .boutique { background: #16213e; padding: 15px; border-radius: 15px; width: 460px; margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-height: 280px; overflow-y: auto; border: 1px solid #333; }
-        .shop-btn { padding: 12px; cursor: pointer; border-radius: 8px; border: none; font-size: 0.75rem; color: white; background: #1e272e; font-weight: bold; }
+        .boutique { background: #16213e; padding: 15px; border-radius: 15px; width: 480px; margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-height: 400px; overflow-y: auto; border: 1px solid #333; }
+        .shop-btn { padding: 12px; cursor: pointer; border-radius: 8px; border: none; font-size: 0.75rem; color: white; background: #1e272e; font-weight: bold; line-height: 1.2; }
         .full { grid-column: span 2; }
         
-        #btn-event-global { background: linear-gradient(45deg, #ff4757, #ffa502); border: 2px solid gold; font-size: 0.9rem; animation: pulse 1s infinite; }
+        #btn-event-global { background: linear-gradient(45deg, #ff4757, #ffa502); border: 2px solid gold; animation: pulse 1s infinite; }
         @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; transform: scale(1.02); } 100% { opacity: 0.8; } }
         
         .fondateur-tag { color: #ffcc00; font-weight: bold; text-shadow: 0 0 8px #ffcc00; }
@@ -41,7 +41,6 @@
 </head>
 <body>
     <div id="credits">V64 - Valentin Dev</div>
-
     <div id="global-announcement"></div>
 
     <div id="menu-accueil">
@@ -69,96 +68,80 @@
         <div class="boutique">
             <button id="btn-event-global" class="shop-btn full" onclick="clicEventGlobal()">🎁 EVENT GLOBAL (+1 LVL) : --:--:--</button>
             
-            <button id="btn-admin-msg" class="shop-btn full dev-btn" style="display:none; background: #fff !important; color: #000 !important;" onclick="diffuserAnnonce()">📢 ENVOYER UNE ANNONCE GLOBALE</button>
+            <button class="shop-btn" style="background:#6c5ce7" onclick="acheterSubwoofer()">🔊 Subwoofer Bass (25k)<br>+500 Force</button>
+            <button class="shop-btn" style="background:#00cec9" onclick="acheterDriftCar()">🚗 Drift Car (250k)<br>+5k/s Auto</button>
+            <button class="shop-btn" style="background:#ff9f43" onclick="acheterDoubleLvl()">⏫ Boost Exp (250k)<br>+5 Niveaux</button>
+            <button class="shop-btn" style="background:#54a0ff" onclick="acheterSuperAimant()">🧲 Aimant (1M)<br>+25k Force</button>
             
-            <button id="btn-admin-lvl" class="shop-btn full dev-btn" style="display:none;" onclick="adminBoost()">💎 ADMIN : +10 000 LVL</button>
-            <button id="btn-dev-click" class="shop-btn full dev-btn" style="display:none;" onclick="achatDevClick()">🔥 MEGA CLIC DEV (1 Milliard : +900M/clic)</button>
+            <button class="shop-btn full" style="background:linear-gradient(45deg, #636e72, #2d3436)" onclick="acheterStudioPrive()">🎧 Studio de Mixage (5M)<br>+150k Force</button>
             
+            <button class="shop-btn" style="background:#1dd1a1" onclick="acheterFermeDeBacons()">🥓 Ferme Bacons (2 Mrds)<br>+10M/s Auto</button>
+            <button class="shop-btn" style="background:#fab1a0" onclick="acheterNeonCity()">🌃 Neon City (100M)<br>+2M/s Auto</button>
+
+            <button class="shop-btn full" style="background:linear-gradient(45deg, #f1c40f, #f39c12)" onclick="acheterIlluminati()">👁️ SECRET ILLUMINATI (50 Mrds)<br>Force de Clic x10</button>
+            <button class="shop-btn full" style="background:linear-gradient(45deg, #2c3e50, #000000); color:#ffcc00; border:1px solid gold;" onclick="acheterTrouNoir()">🕳️ TROU NOIR (1 Trillion)<br>+1 Milliard/s</button>
+
             <button class="shop-btn" style="background:#8e44ad" onclick="acheterPotion()">🧪 Potion XP (15k)</button>
             <button class="shop-btn" style="background:#d35400" onclick="acheterPioche()">⛏️ Pioche +50 (5k)</button>
-            <button class="shop-btn" onclick="acheterForce()">Force +1 (50)</button>
-            <button class="shop-btn" onclick="acheterMega()">Mega +1k (500)</button>
-            <button class="shop-btn" onclick="acheterRobot()">Robot +3/s (100)</button>
-            <button class="shop-btn" onclick="acheterUsine()">Usine +8k/s (50k)</button>
-            <button class="shop-btn full" style="background:linear-gradient(45deg,#00dbde,#fc00ff)" onclick="acheterCristal()">💎 CRISTAL INFINI (50M)</button>
-            <button class="shop-btn full" style="background:#27ae60" onclick="acheterFermeMilliards()">🚜 FERME SPATIALE (1 Milliard)</button>
+
+            <button id="btn-admin-msg" class="shop-btn full dev-btn" style="display:none; background: #fff !important; color: #000 !important;" onclick="diffuserAnnonce()">📢 ENVOYER UNE ANNONCE GLOBALE</button>
+            <button id="btn-admin-lvl" class="shop-btn full dev-btn" style="display:none;" onclick="adminBoost()">💎 ADMIN : +10 000 LVL</button>
+            <button id="btn-dev-click" class="shop-btn full dev-btn" style="display:none;" onclick="achatDevClick()">🔥 MEGA CLIC DEV (+900M)</button>
         </div>
     </div>
 
     <script>
         let pieces = 0, total = 0, lvl = 1, force = 1, robots = 0, usines = 0, pseudo = "", isDev = false;
         let bots = [{ n: "Lucas", a: 500, l: 1 }, { n: "Emma", a: 1200, l: 2 }, { n: "Saphir", a: 3000, l: 5 }];
-        
         const dateFinFixe = new Date("March 26, 2026 22:30:00").getTime();
 
-        function reinitialiserCompte() { localStorage.removeItem("clicker_V50"); location.reload(); }
+        function reinitialiserCompte() { localStorage.removeItem("clicker_V64"); location.reload(); }
 
         function lancerTout() {
-            let save = JSON.parse(localStorage.getItem("clicker_V50"));
+            let save = JSON.parse(localStorage.getItem("clicker_V64"));
             if(save) {
                 pieces = save.pieces; total = save.total; lvl = save.lvl; 
                 force = save.force; robots = save.robots; usines = save.usines;
                 pseudo = save.pseudo; isDev = save.isDev;
             } else {
                 pseudo = prompt("Pseudo :") || "Joueur";
-                if(pseudo === "Valentin_Dev") { 
-                    isDev = true; 
-                    pieces = 1000000000; 
-                    lvl = 100; 
-                    force = 5000; 
-                }
+                if(pseudo === "Valentin_Dev") { isDev = true; pieces = 1000000000; lvl = 100; force = 5000; }
             }
-            
             if(isDev) {
                 document.getElementById('btn-admin-lvl').style.display = "block";
                 document.getElementById('btn-dev-click').style.display = "block";
                 document.getElementById('btn-admin-msg').style.display = "block";
-                ajouterMsg("SYSTÈME", "👑 Valentin, la montre du monde est synchronisée.");
             }
-            
             document.getElementById('menu-accueil').style.display = 'none';
             setInterval(boucle, 1000);
             actualiser();
         }
 
-        // --- NOUVELLE FONCTION : ANNONCE GLOBALE ---
         function diffuserAnnonce() {
-            let msg = prompt("Entrez le message à envoyer à tous les joueurs :");
-            if(msg && msg.trim() !== "") {
+            let msg = prompt("Message global :");
+            if(msg) {
                 let banner = document.getElementById('global-announcement');
                 banner.innerHTML = `<span style="color:red">📢 [FONDATEUR] Valentin :</span> ${msg}`;
                 banner.style.top = "0";
-                
-                alert("Message envoyé avec succès !");
-                
-                // Le message disparaît après 7 secondes
-                setTimeout(() => {
-                    banner.style.top = "-100px";
-                }, 7000);
-            } else {
-                alert("Erreur : Le message est vide ou a été annulé.");
+                setTimeout(() => { banner.style.top = "-100px"; }, 7000);
             }
         }
 
         function boucle() {
-            let g = (robots * 3 + usines * 8000);
-            pieces += g; total += g;
-
+            let gainAuto = (robots * 3 + usines * 8000);
+            pieces += gainAuto; total += gainAuto;
+            
             let maintenant = new Date().getTime();
             let distance = dateFinFixe - maintenant;
             let btnE = document.getElementById('btn-event-global');
 
             if (distance > 0) {
-                let h = Math.floor(distance / (1000 * 60 * 60));
-                let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                let s = Math.floor((distance % (1000 * 60)) / 1000);
+                let h = Math.floor(distance / (3600000)), m = Math.floor((distance % 3600000) / 60000), s = Math.floor((distance % 60000) / 1000);
                 btnE.innerText = `🎁 EVENT GLOBAL (+1 LVL) : ${h}h ${m}m ${s}s`;
-            } else {
-                btnE.style.display = "none";
-            }
+            } else { btnE.style.display = "none"; }
 
             actualiser();
-            localStorage.setItem("clicker_V50", JSON.stringify({pieces, total, lvl, force, robots, usines, pseudo, isDev}));
+            localStorage.setItem("clicker_V64", JSON.stringify({pieces, total, lvl, force, robots, usines, pseudo, isDev}));
         }
 
         function cliquer() {
@@ -166,34 +149,28 @@
             pieces += gain; total += gain;
             while(total >= (lvl * 1000 * Math.pow(2, lvl-1))) { 
                 lvl++; 
-                if(lvl % 10 === 0 && !isDev) {
-                    pieces *= 0.5;
-                    alert("🚨 TAXE DE NIVEAU " + lvl + " 🚨");
-                }
+                if(lvl % 10 === 0 && !isDev) { pieces *= 0.5; alert("🚨 TAXE DE NIVEAU " + lvl + " 🚨"); }
             }
             actualiser();
         }
 
-        function achatDevClick() {
-            if(pieces >= 1000000000) {
-                pieces -= 1000000000;
-                force += 900000000;
-                ajouterMsg("ADMIN", "⚠️ MEGA CLIC ACTIVÉ (+900M) !");
-                actualiser();
-            }
-        }
+        // FONCTIONS BOUTIQUE
+        function acheterSubwoofer() { if(pieces >= 25000) { pieces -= 25000; force += 500; ajouterMsg("SHOP", "🔊 Basses à fond !"); actualiser(); } }
+        function acheterDriftCar() { if(pieces >= 250000) { pieces -= 250000; robots += 1666; ajouterMsg("SHOP", "🚗 Drift en cours..."); actualiser(); } }
+        function acheterDoubleLvl() { if(pieces >= 250000) { pieces -= 250000; lvl += 5; actualiser(); } }
+        function acheterSuperAimant() { if(pieces >= 1000000) { pieces -= 1000000; force += 25000; actualiser(); } }
+        function acheterStudioPrive() { if(pieces >= 5000000) { pieces -= 5000000; force += 150000; actualiser(); } }
+        function acheterFermeDeBacons() { if(pieces >= 2000000000) { pieces -= 2000000000; usines += 1250; actualiser(); } }
+        function acheterNeonCity() { if(pieces >= 100000000) { pieces -= 100000000; usines += 250; actualiser(); } }
+        function acheterIlluminati() { if(pieces >= 50000000000) { pieces -= 50000000000; force *= 10; ajouterMsg("👁️", "Clic x10 activé !"); actualiser(); } }
+        function acheterTrouNoir() { if(pieces >= 1000000000000) { pieces -= 1000000000000; usines += 125000; ajouterMsg("⚠️", "1 Milliard/s généré !"); actualiser(); } }
+        
+        function acheterPotion() { if(pieces >= 15000) { pieces -= 15000; total += 100000; while(total >= (lvl * 1000 * Math.pow(2, lvl-1))) lvl++; actualiser(); } }
+        function acheterPioche() { if(pieces >= 5000) { pieces -= 5000; force += 50; actualiser(); } }
 
-        function clicEventGlobal() {
-            lvl += 1;
-            ajouterMsg("SYSTÈME", "⭐ " + pseudo + " monte d'un cran !");
-            actualiser();
-        }
-
-        function adminBoost() {
-            lvl += 10000;
-            ajouterMsg("ADMIN", "🚀 +10 000 LVL d'un coup !");
-            actualiser();
-        }
+        function clicEventGlobal() { lvl += 1; ajouterMsg("SYSTÈME", "⭐ " + pseudo + " gagne 1 niveau !"); actualiser(); }
+        function adminBoost() { lvl += 10000; actualiser(); }
+        function achatDevClick() { if(pieces >= 1000000000) { pieces -= 1000000000; force += 900000000; actualiser(); } }
 
         function envoyerMessage() {
             let i = document.getElementById('chat-input');
@@ -216,15 +193,6 @@
             let d2 = [...d].sort((a,b) => b.l - a.l);
             document.getElementById('liste-niveaux').innerHTML = d2.map((g,i) => `<div style="padding:2px; ${g.isMe?'background:rgba(162,155,254,0.2)':''}">#${i+1} ${g.n} - Lvl ${g.l}</div>`).join('');
         }
-
-        function acheterPotion() { if(pieces >= 15000) { pieces -= 15000; total += 100000; while(total >= (lvl * 1000 * Math.pow(2, lvl-1))) lvl++; actualiser(); } }
-        function acheterPioche() { if(pieces >= 5000) { pieces -= 5000; force += 50; actualiser(); } }
-        function acheterForce() { if(pieces >= 50) { pieces -= 50; force += 1; actualiser(); } }
-        function acheterMega() { if(pieces >= 500) { pieces -= 500; force += 1000; actualiser(); } }
-        function acheterRobot() { if(pieces >= 100) { pieces -= 100; robots++; actualiser(); } }
-        function acheterUsine() { if(pieces >= 50000) { pieces -= 50000; usines++; actualiser(); } }
-        function acheterCristal() { if(pieces >= 50000000) { pieces -= 50000000; force += 1000000; actualiser(); } }
-        function acheterFermeMilliards() { if(pieces >= 1000000000) { pieces -= 1000000000; usines += 800; actualiser(); } }
     </script>
 </body>
 </html>
